@@ -18,8 +18,8 @@ const INITIAL_VIEW_STATE = {
   bearing: 0
 };
 
-// MapTiler key from environment or fallback
-const MAP_STYLE = 'https://demotiles.maplibre.org/style.json'; // Fallback style
+// CartoDB Positron (Fast, Free, Production Ready)
+const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 
 const MapComponent: React.FC<MapProps> = ({ layers = [], onFeatureClick }) => {
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
