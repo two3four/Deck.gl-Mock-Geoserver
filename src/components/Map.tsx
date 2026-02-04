@@ -21,7 +21,7 @@ const MAP_STYLE = 'https://demotiles.maplibre.org/style.json'; // Fallback style
 
 const MapComponent: React.FC<MapProps> = ({ layers = [] }) => {
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
-  const [tooltip, setTooltip] = useState<{ x: number, y: number, object: any } | null>(null);
+
 
   const onViewStateChange = ({ viewState }: any) => {
     setViewState(viewState);
