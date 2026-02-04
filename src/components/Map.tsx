@@ -9,11 +9,11 @@ interface MapProps {
   onFeatureClick?: (info: any) => void;
 }
 
-// San Francisco centered view for BART data
+// Global view for Countries data
 const INITIAL_VIEW_STATE = {
-  longitude: -122.4,
-  latitude: 37.75,
-  zoom: 10,
+  longitude: 0,
+  latitude: 20,
+  zoom: 2,
   pitch: 0,
   bearing: 0
 };

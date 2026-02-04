@@ -3,8 +3,8 @@ import type { PickingInfo } from '@deck.gl/core';
 
 // Mock Data URL - simulating a WFS GeoJSON response or Vector Tiles
 // Using a public dataset for the demo (US specific or whatever is reliable)
-// Example: New York City Subway Lines or similar simple vector data
-const MOCK_GEOSERVER_URL = 'https://raw.githubusercontent.com/visgl/deck.gl-data/master/website/bart-lines.json';
+// Local Countries Data (Fast, Reliable)
+const MOCK_GEOSERVER_URL = '/countries.geo.json';
 
 export function createGeoserverLayer({
     id = 'geoserver-layer',
