@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DeckGL from '@deck.gl/react';
 import { Map as MapLibre } from 'react-map-gl/maplibre';
-import { LayersList } from '@deck.gl/core';
+import type { LayersList } from '@deck.gl/core';
 import 'maplibre-gl/dist/maplibre-gl.css';
 
 interface MapProps {
@@ -21,7 +21,7 @@ const MAP_STYLE = 'https://demotiles.maplibre.org/style.json'; // Fallback style
 
 const MapComponent: React.FC<MapProps> = ({ layers = [] }) => {
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
-  const [tooltip, setTooltip] = useState<{x: number, y: number, object: any} | null>(null);
+  const [tooltip, setTooltip] = useState<{ x: number, y: number, object: any } | null>(null);
 
   const onViewStateChange = ({ viewState }: any) => {
     setViewState(viewState);
@@ -35,42 +35,42 @@ const MapComponent: React.FC<MapProps> = ({ layers = [] }) => {
         layers={layers}
         onViewStateChange={onViewStateChange}
         getTooltip={({ object }: any) => object && {
-            html: `<h3>${object.properties?.name || 'Feature'}</h3><div>${JSON.stringify(object.properties)}</div>`,
-            style: {
-                backgroundColor: '#fff',
-                fontSize: '0.8em',
-                padding: '5px'
-            }
+          html: `<h3>${object.properties?.name || 'Feature'}</h3><div>${JSON.stringify(object.properties)}</div>`,
+          style: {
+            backgroundColor: '#fff',
+            fontSize: '0.8em',
+            padding: '5px'
+          }
         }}
         onClick={(info) => {
-            if (info.object) {
-                console.log('Clicked:', info.object);
-                alert(`Clicked feature: ${JSON.stringify(info.object.properties)}`);
-            }
+          if (info.object) {
+            console.log('Clicked:', info.object);
+            alert(`Clicked feature: ${JSON.stringify(info.object.properties)}`);
+          }
         }}
       >
         <MapLibre
-            mapStyle={MAP_STYLE}
-            style={{width: '100%', height: '100%'}}
+          mapStyle={MAP_STYLE}
+          style={{ width: '100%', height: '100%' }}
         />
       </DeckGL>
-      
+
       {/* Overlay UI for instructions */}
       <div style={{
-          position: 'absolute', 
-          top: 10, 
-          left: 10, 
-          background: 'white', 
-          padding: 10, 
-          borderRadius: 4, 
-          zIndex: 100,
-          maxWidth: 300
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        background: 'white',
+        padding: 10,
+        borderRadius: 4,
+        zIndex: 100,
+        maxWidth: 300
       }}>
-          <h3>Deck.gl + MapLibre Demo</h3>
-          <p>Click on features to see attributes.</p>
-          <p style={{fontSize: '0.8rem', color: '#666'}}>
-              Simulating Geoserver Vector Layers using GeoJSON.
-          </p>
+        <h3>Deck.gl + MapLibre Demo</h3>
+        <p>Click on features to see attributes.</p>
+        <p style={{ fontSize: '0.8rem', color: '#666' }}>
+          Simulating Geoserver Vector Layers using GeoJSON.
+        </p>
       </div>
     </div>
   );

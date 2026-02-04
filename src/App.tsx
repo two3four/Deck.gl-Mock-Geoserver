@@ -1,4 +1,3 @@
-import React from 'react';
 import MapComponent from './components/Map';
 import ErrorBoundary from './components/ErrorBoundary';
 import { createGeoserverLayer } from './layers/GeoserverLayer';
