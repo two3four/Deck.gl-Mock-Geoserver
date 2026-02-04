@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import DeckGL from '@deck.gl/react';
-import { Map as MapLibre } from 'react-map-gl/maplibre';
 import type { LayersList } from '@deck.gl/core';
-import 'maplibre-gl/dist/maplibre-gl.css';
 
 interface MapProps {
   layers?: LayersList;
@@ -11,15 +9,12 @@ interface MapProps {
 
 // Global view for Countries data
 const INITIAL_VIEW_STATE = {
-  longitude: 0,
+  longitude: 10,
   latitude: 20,
-  zoom: 2,
+  zoom: 1.5,
   pitch: 0,
   bearing: 0
 };
-
-// CartoDB Positron (Fast, Free, Production Ready)
-const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
 
 const MapComponent: React.FC<MapProps> = ({ layers = [], onFeatureClick }) => {
   const [viewState, setViewState] = useState(INITIAL_VIEW_STATE);
@@ -29,7 +24,8 @@ const MapComponent: React.FC<MapProps> = ({ layers = [], onFeatureClick }) => {
   };
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    // Professional Map Background Color (matches standard water layers)
+    <div style={{ position: 'relative', width: '100%', height: '100%', backgroundColor: '#cad2d3' }}>
       <DeckGL
         initialViewState={viewState}
         controller={true}
@@ -50,10 +46,6 @@ const MapComponent: React.FC<MapProps> = ({ layers = [], onFeatureClick }) => {
           }
         }}
       >
-        <MapLibre
-          mapStyle={MAP_STYLE}
-          style={{ width: '100%', height: '100%' }}
-        />
       </DeckGL>
     </div>
   );

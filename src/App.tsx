@@ -1,21 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MapComponent from './components/Map';
 import Sidebar from './components/Sidebar';
 import ErrorBoundary from './components/ErrorBoundary';
-import { createGeoserverLayer } from './layers/GeoserverLayer';
+import { createGeoserverLayers } from './layers/GeoserverLayer';
 import './App.css';
 
 function App() {
   const [layerVisible, setLayerVisible] = useState(true);
   const [selectedFeature, setSelectedFeature] = useState<any | null>(null);
+  const [geoData, setGeoData] = useState<any>(null);
 
-  // Create layer instance with dynamic visibility
-  const geoserverLayer = createGeoserverLayer({
+  // Fetch local data on mount
+  useEffect(() => {
+    fetch('/countries.geo.json')
+      .then(resp => resp.json())
+      .then(data => setGeoData(data))
+      .catch(err => console.error("Failed to load map data", err));
+  }, []);
+
+  // Create layer instances (Polygon + Text)
+  const layers = createGeoserverLayers({
+    data: geoData,
     visible: layerVisible,
     onClick: (info) => {
-      // We handle the click in the Map component via prop, but the layer needs this to know it IS clickable
-      // The actual state update happens in the map's onFeatureClick handler
-      // This is mainly to ensure 'info.object' is picked up by Deck.gl
+      // Click handling provided by layer
     }
   });
 
@@ -42,7 +50,7 @@ function App() {
         {/* Map Area */}
         <div style={{ flex: 1, position: 'relative' }}>
           <MapComponent
-            layers={[geoserverLayer]}
+            layers={layers}
             onFeatureClick={handleFeatureClick}
           />
         </div>
