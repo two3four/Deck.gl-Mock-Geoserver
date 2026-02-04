@@ -1,4 +1,5 @@
 import { GeoJsonLayer, TextLayer } from '@deck.gl/layers';
+import { CollisionFilterExtension } from '@deck.gl/extensions';
 import type { PickingInfo } from '@deck.gl/core';
 
 // Helper to generate a consistent color from a string
@@ -32,7 +33,8 @@ function getLabelPosition(feature: any): [number, number] {
     if (feature.geometry.type === 'Polygon') {
         coords = feature.geometry.coordinates[0];
     } else if (feature.geometry.type === 'MultiPolygon') {
-        // Use the first polygon (usually the largest main landmass)
+        // Use the largest polygon for label placement if possible, or just the first
+        // A simple heuristic: first ring of first polygon
         coords = feature.geometry.coordinates[0][0];
     }
 
@@ -89,18 +91,32 @@ export function createGeoserverLayers({
         id: 'geoserver-labels',
         data: data.features || [],
         visible,
-        pickable: false,
+        pickable: true, // Interactive labels
         getPosition: (d: any) => getLabelPosition(d),
         getText: (d: any) => d.properties?.name || '',
-        getSize: 12,
-        getColor: [50, 50, 50, 255], // Dark Grey for professional look
-        getAngle: 0,
-        getTextAnchor: 'middle',
-        getAlignmentBaseline: 'center',
+        getSize: 14, // Slightly larger base size
+        sizeScale: 1,
+
+        // Aesthetics
+        getColor: [30, 30, 30, 255],
         fontFamily: '"Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif',
-        fontWeight: 600,
-        outlineWidth: 2,
-        outlineColor: [255, 255, 255, 255] // White halo for readability
+        fontWeight: 700,
+        outlineWidth: 3,
+        outlineColor: [255, 255, 255, 255],
+
+        // Responsiveness & Collision
+        extensions: [new CollisionFilterExtension()],
+        collisionEnabled: true,
+        collisionGroup: 'labels',
+        getCollisionPriority: (d: any) => d.properties?.pop_est || 0, // Prioritize larger populations if available
+
+        // Add background for readability/clickability
+        background: true,
+        getBackgroundColor: [255, 255, 255, 150],
+        backgroundPadding: [4, 2],
+
+        // Pass clicks through to the same handler
+        onClick: onClick
     });
 
     return [polygonLayer, textLayer];
